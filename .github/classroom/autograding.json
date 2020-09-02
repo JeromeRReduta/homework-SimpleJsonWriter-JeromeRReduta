@@ -1,0 +1,24 @@
+{
+  "tests": [
+    {
+      "name": "Check Warnings",
+      "setup": "",
+      "run": "mvn -f ./*/pom.xml clean compile -Dmaven.compiler.failOnWarning=true",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 10
+    },
+    {
+      "name": "Check JUnit Tests",
+      "setup": "mvn -f ./*/pom.xml clean compile test-compile -Dmaven.compiler.failOnWarning=false",
+      "run": "mvn -f ./*/pom.xml test",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 90
+    }
+  ]
+}
