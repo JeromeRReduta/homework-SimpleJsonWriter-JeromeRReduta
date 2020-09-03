@@ -1,0 +1,82 @@
+JSON:
+	
+	JSON Array format:
+		{
+			value1,
+			value2,
+			lastVaue
+		}
+		
+No comma @ end of last value
+
+	JSON Obj format:
+		{
+			"objName1": value1,
+			"objName2": value2,
+			"lastObjName": value3
+		}
+		
+	Again, no comma @ end of last value
+	
+	
+	JSON Nested Obj format:
+		{
+			"objName1": {
+				value1,
+				value2
+			},
+			
+			"objName2": {
+				value1,
+				value2,
+				value3
+			}
+		}
+		
+		- basically, it's a JSON array after each obj name
+		- no comma @ end of last value in each obj or @ end of last obj
+		- IMPT: comma after end of each obj (after closing brackets) unless it's the last obj
+		
+		
+		-IMPT: Use UTF while writing files
+		
+		
+Iteration
+	I think this just means using StringBuilder/Buffer w/ loops
+	
+	
+asArray():
+	
+	given asArray([5, 2, 3], writer, 0), should get output:
+		(starts w/ no indent)
+		{
+			5,
+			2,
+			3
+		}
+		
+	Pseudocode:
+		
+		given collection of ints elements, Writer named writer, int called level:
+		//Head - for first elem in list
+		
+		writer writes "{"
+		writer makes newline
+		writer indents
+		
+		writer.write(first elem)
+			
+		// General case:
+		for int i = 1; i < elements.length - 1; i++: // starts @ 2nd item
+			writer.write(",")
+			writer makes newline
+			writer indents
+			
+
+		// Case - tail:
+		writer.write(last elem)
+		writer makes newline // does not write ","
+		writer.write("}")
+		
+				
+	
