@@ -71,6 +71,7 @@ asArray():
 			writer.write(",")
 			writer makes newline
 			writer indents
+			writer.write(elements[i])
 			
 
 		// Case - tail:
@@ -78,5 +79,87 @@ asArray():
 		writer makes newline // does not write ","
 		writer.write("}")
 		
+Possible to do it in 2 cases:
+	(After writing "{" and going to newline)
+	
+	Not tail (head and everything but last thing):
+		writer indents
+		writer.write(elem)
+		writer.write(",")
+		writer makes newline
+		
+	Tail (last entry):
+		writer indents
+		writer.write(elem)
+		writer makes newline
+		writer.write("}")
+		
+	asArray() psuedocode w/ only 2 cases:
+		
+		//Start array
+		writer.write("{")
+		writer makes newline
+		
+		//Head & all entries except tail
+		for int i = 0; i < elements.length - 1; i++:
+			writer indents
+			writer.write(elements[i])
+			writer.write(",")
+			writer makes newline
+			
+		//Tail
+		writer.write(elements[-1])
+		writer makes newline
+		writer.write("{")
+		
+Gonna make helper func - addArrayEntry(String element, int level, int addComma):
+	// level = indent lvl, addComma = "boolean" for whether to add comma at end
+	String commaTable = new String[] {"", ","}
+	
+	writer indents level times
+	writer.write(element)
+	writer.write(commaTable[addComma])
+	writer makes newline
+	
+	
+Note: Given func indent() already indents and writes element for us
 				
+	
+oh that's right, JSONWriter works with collections
+
+use head case and other cases, not tail case
+
+asArray() pseudocode, v3:
+	make Collections Iterator called it, linked to collection called elements
+	
+	//head
+	indent("{\n", writer, 0)
+	indent(it.next(), writer, 1)
+	
+	/**
+	* head ends up looking like this:
+	* {
+	* 	first elem
+	*/
+	
+	
+	// other values
+	while it.hasNext():
+		indent(",\n", writer, 0)
+		indent(it.next(), 1)
+		
+	/** each elem written like this:
+	*
+	* 	(last elem),
+	*	(this elem)
+	*/ 
+		
+	// done w/ all values - tail
+	indent("\n}", writer, 0")
+	
+	/** tail looks like this:
+	*
+	*	(last elem)
+	* }
+	
 	

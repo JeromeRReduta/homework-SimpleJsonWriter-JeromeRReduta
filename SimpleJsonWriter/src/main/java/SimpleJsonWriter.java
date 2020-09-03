@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
+import java.util.Iterator;
 /**
  * Outputs several simple data structures in "pretty" JSON format where newlines
  * are used to separate elements and nested elements are indented using tabs.
@@ -34,7 +35,26 @@ public class SimpleJsonWriter {
 	public static void asArray(Collection<Integer> elements, Writer writer, int level) throws IOException {
 		// TODO Fill in using iteration (not replace/split/join methods).
 		// TODO Optional: Avoid repeated code and hard-coding the indent level.
-		throw new UnsupportedOperationException("Not yet implemented.");
+		
+		//Start array
+		Iterator<Integer> it = elements.iterator();
+		
+		//Case: Head
+		writer.write("{\n");
+		if (it.hasNext()) {
+			indent(it.next(), writer, 1);
+		}
+			
+		
+		//Case: Other values
+		while (it.hasNext()) {
+			writer.write(",\n");
+			indent(it.next(), writer, 1);
+		}
+		
+		//Case: Tail/After all elements
+		writer.write("\n}");
+
 	}
 
 	/**
@@ -262,6 +282,25 @@ public class SimpleJsonWriter {
 		catch (IOException e) {
 			return null;
 		}
+	}
+	
+	/**
+	 * Adds an element to a JSON Array
+	 * 
+	 * @param element the elment to add
+	 * @param times default number of times to indent
+	 * @param addComma an integer: 0 or 1, that decides whether JSONWriter will add a comma at the end of the entry
+	 * @param Writer the writer to use
+	 * @throws IOException 
+	 */
+	
+	private void addArrayEntry(Object element, int times, int addComma, Writer writer) throws IOException  {
+		String[] commaTable = new String[] {"", ","};
+		
+		indent(writer, times);
+		writer.write(commaTable[addComma]);
+		writer.write("\n");
+		
 	}
 
 	/**
