@@ -1,13 +1,14 @@
 JSON:
 	
 	JSON Array format:
-		{
+		[
 			value1,
 			value2,
 			lastVaue
-		}
+		]
 		
 No comma @ end of last value
+Sq. brackets
 
 	JSON Obj format:
 		{
@@ -17,26 +18,28 @@ No comma @ end of last value
 		}
 		
 	Again, no comma @ end of last value
+	Curly brackets
 	
 	
 	JSON Nested Obj format:
 		{
-			"objName1": {
+			"objName1": [
 				value1,
 				value2
-			},
+			],
 			
-			"objName2": {
+			"objName2": [
 				value1,
 				value2,
 				value3
-			}
+			]
 		}
 		
 		- basically, it's a JSON array after each obj name
 		- no comma @ end of last value in each obj or @ end of last obj
 		- IMPT: comma after end of each obj (after closing brackets) unless it's the last obj
-		
+		- Sq. brackets for arrays, curly brackets for obj		
+
 		
 		-IMPT: Use UTF while writing files
 		
@@ -161,5 +164,42 @@ asArray() pseudocode, v3:
 	*
 	*	(last elem)
 	* }
+	
+	
+
+writeEntry() & asObject():
+	
+	writeEntry():
+		1. Makes newline
+		2. Writes key and value as "key": value
+
+
+	asObject():
+		Params:
+		
+			Given Map<String, Integer> elements, Writer writer, int level
+
+		
+		Psuedocode:
+
+			Iterator<String, Integer> it = elements.iterator()
+
+			//Head
+			writer.write("{")
+
+			if (it.hasNext()):
+				writeEntry(it.next())
+
+			//Case: Other values
+			while (it.hasNExt()) {
+				writer.write(",")
+				writeEntry(it.next())
+
+			//Case: Tail/After all elements:
+			writer.write("\n}") // Curly brackets
+				
+			
+
+
 	
 	

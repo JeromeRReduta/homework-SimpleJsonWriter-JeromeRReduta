@@ -5,9 +5,13 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeSet;
 
 import java.util.Iterator;
@@ -40,20 +44,21 @@ public class SimpleJsonWriter {
 		Iterator<Integer> it = elements.iterator();
 		
 		//Case: Head
-		writer.write("{\n");
+		writer.write("[");
 		if (it.hasNext()) {
-			indent(it.next(), writer, 1);
+			writer.write("\n");
+			indent(it.next(), writer, level + 1);
 		}
 			
 		
 		//Case: Other values
 		while (it.hasNext()) {
 			writer.write(",\n");
-			indent(it.next(), writer, 1);
+			indent(it.next(), writer, level + 1);
 		}
 		
 		//Case: Tail/After all elements
-		writer.write("\n}");
+		writer.write("\n]");
 
 	}
 
@@ -66,9 +71,25 @@ public class SimpleJsonWriter {
 	 * @throws IOException if an IO error occurs
 	 */
 	public static void asObject(Map<String, Integer> elements, Writer writer, int level) throws IOException {
-		// TODO Fill in using iteration (not replace/split/join methods).
-		// TODO Optional: Avoid repeated code and hard-coding the indent level.
-		throw new UnsupportedOperationException("Not yet implemented.");
+		
+		//Case: Start of obj/head
+		Set<Map.Entry<String,Integer>> entries = elements.entrySet();
+		Iterator<Map.Entry<String, Integer>> it = entries.iterator();
+		
+		writer.write("{");
+		if (it.hasNext()) {
+			writeEntry(it.next(), writer, level + 1);
+		}
+		
+		
+		//Case: Other values
+		while (it.hasNext()) {
+			writer.write(",");
+			writeEntry(it.next(), writer, level + 1);
+		}
+		
+		//Case: Tail/end of obj
+		writer.write("\n}");
 	}
 
 	/**
@@ -102,8 +123,34 @@ public class SimpleJsonWriter {
 		 * You may want to use the "var" keyword here to make dealing with the syntax
 		 * a little bit easier.
 		 */
+		
+		//Case: Start of obj/head
+		Set<?> entries = elements.entrySet();
+		Iterator<?> it = entries.iterator();
+		
+		while (it.hasNext()) {
+			System.out.println(it.next())
+		}
+		/**
+		writer.write("{");
+		if (it.hasNext()) {
+			writeEntry(it.next(), writer, level + 1);
+		}
+		
+		
+		//Case: Other values
+		while (it.hasNext()) {
+			writer.write(",");
+			writeEntry(it.next(), writer, level + 1);
+		}
+		
+		//Case: Tail/end of obj
+		writer.write("\n}");
+	}
+		
 
 		throw new UnsupportedOperationException("Not yet implemented.");
+		*/
 	}
 
 	/*
@@ -323,5 +370,28 @@ public class SimpleJsonWriter {
 		elements.add(67);
 		System.out.println("\nSimple:");
 		System.out.println(asArray(elements));
+		
+		
+		Map<String, ? extends Collection<Integer>> map = new HashMap<>();
+		
+		Collection<Integer>[] a = new ArrayList[5];
+		
+		for (int i = 0; i < a.length; i++) {
+			a[i] = new ArrayList<>();
+			
+			for (int j = 0; j < 6; j++) {
+				a[i].add(j);
+			}
+		}
+		
+		
+		map.put("1", a[0]);
+		map.add("2", a[1]);
+		}
+		Collection<Integer> b = new ArrayList<>();
+		
+		
+		
+		
 	}
 }
