@@ -58,7 +58,11 @@ public class SimpleJsonWriter {
 		}
 		
 		//Case: Tail/After all elements
-		writer.write("\n]");
+
+		writer.write("\n");
+		indent(writer, level);
+		writer.write("]");
+		
 
 	}
 
@@ -125,33 +129,27 @@ public class SimpleJsonWriter {
 		 */
 		
 		//Case: Start of obj/head
-		Set<?> entries = elements.entrySet();
-		Iterator<?> it = entries.iterator();
 		
-		while (it.hasNext()) {
-			System.out.println(it.next())
-		}
-		/**
+		Iterator<String> it = elements.keySet().iterator();
+		
 		writer.write("{");
 		if (it.hasNext()) {
-			writeEntry(it.next(), writer, level + 1);
+			String key = it.next();
+			writeEntry(key, elements.get(key), writer, level + 1);
+			
 		}
-		
 		
 		//Case: Other values
 		while (it.hasNext()) {
 			writer.write(",");
-			writeEntry(it.next(), writer, level + 1);
+			String key = it.next();
+			writeEntry(key, elements.get(key), writer, level + 1);
 		}
 		
 		//Case: Tail/end of obj
 		writer.write("\n}");
 	}
-		
 
-		throw new UnsupportedOperationException("Not yet implemented.");
-		*/
-	}
 
 	/*
 	 * TODO: You are encouraged to include helper methods below. Here are a few
@@ -217,6 +215,13 @@ public class SimpleJsonWriter {
 		indent(entry.getKey(), writer, level);
 		writer.write(": ");
 		writer.write(entry.getValue().toString());
+	}
+	
+	public static void writeEntry(String key, Collection<Integer> values, Writer writer, int level) throws IOException {
+		writer.write("\n");;
+		indent(key, writer, level);
+		writer.write(": ");
+		asArray(values, writer, level);
 	}
 
 	/*
@@ -370,27 +375,6 @@ public class SimpleJsonWriter {
 		elements.add(67);
 		System.out.println("\nSimple:");
 		System.out.println(asArray(elements));
-		
-		
-		Map<String, ? extends Collection<Integer>> map = new HashMap<>();
-		
-		Collection<Integer>[] a = new ArrayList[5];
-		
-		for (int i = 0; i < a.length; i++) {
-			a[i] = new ArrayList<>();
-			
-			for (int j = 0; j < 6; j++) {
-				a[i].add(j);
-			}
-		}
-		
-		
-		map.put("1", a[0]);
-		map.add("2", a[1]);
-		}
-		Collection<Integer> b = new ArrayList<>();
-		
-		
 		
 		
 	}
