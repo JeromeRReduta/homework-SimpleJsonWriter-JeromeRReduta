@@ -5,10 +5,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -108,25 +105,7 @@ public class SimpleJsonWriter {
 	 */
 	public static void asNestedArray(Map<String, ? extends Collection<Integer>> elements, Writer writer, int level)
 			throws IOException {
-		// TODO Fill in using iteration (not replace/split/join methods).
-		// TODO Optional: Avoid repeated code and hard-coding the indent level.
-
-		/*
-		 * TODO Read then delete this comment.
-		 *
-		 * The parameter syntax for elements looks like:
-		 *
-		 * Map<String, ? extends Collection<Integer>> elements
-		 *
-		 * The syntax above makes this method directly useful for your project.
-		 * However, you may not know how to interpret this syntax yet. It behaves
-		 * as if it were this instead:
-		 *
-		 * HashMap<String, HashSet<Integer>> elements
-		 *
-		 * You may want to use the "var" keyword here to make dealing with the syntax
-		 * a little bit easier.
-		 */
+		
 		
 		//Case: Start of obj/head
 		
@@ -217,6 +196,14 @@ public class SimpleJsonWriter {
 		writer.write(entry.getValue().toString());
 	}
 	
+	/**
+	 * Writes a map entry in pretty JSON format. Use for nested objects.
+	 * @param key key of map entry
+	 * @param values value of the map entry, which is a collection of integers
+	 * @param writer the writer to use
+	 * @param level initial indent level
+	 * @throws IOException if IO error occurs
+	 */
 	public static void writeEntry(String key, Collection<Integer> values, Writer writer, int level) throws IOException {
 		writer.write("\n");;
 		indent(key, writer, level);
@@ -335,25 +322,7 @@ public class SimpleJsonWriter {
 			return null;
 		}
 	}
-	
-	/**
-	 * Adds an element to a JSON Array
-	 * 
-	 * @param element the elment to add
-	 * @param times default number of times to indent
-	 * @param addComma an integer: 0 or 1, that decides whether JSONWriter will add a comma at the end of the entry
-	 * @param Writer the writer to use
-	 * @throws IOException 
-	 */
-	
-	private void addArrayEntry(Object element, int times, int addComma, Writer writer) throws IOException  {
-		String[] commaTable = new String[] {"", ","};
-		
-		indent(writer, times);
-		writer.write(commaTable[addComma]);
-		writer.write("\n");
-		
-	}
+
 
 	/**
 	 * A simple main method that demonstrates this class.
