@@ -200,6 +200,58 @@ writeEntry() & asObject():
 				
 			
 
+asNestedArray():
+	Weird syntax: Map<String, ? extends Collection<Integer>>
+	According to file, can basically treat as HashMap<String, HashSet<Integer>>
 
+	Params:
+		(1) Map<String, ? extends Collection<Integer>> elements (see above notes) 
+		(2) Writer writer
+		(3) int level
+
+	Pseudocode:
+		Entry<whatever type> entries = elements.entrySet();
+		Iterator<whatever type> it = entries.iterator();
+
+		// Same format as asObject, except the values are the collections written asArray()
+
+		//Case: Head/start of obj
+		writer.write("{");
+		
+		Set<Map.Entry...> entries = elements.entrySet();
+		Iterator<...> it = entries.iterator();
+		
+		if (it.hasNext()) {
+			writeEntry(it.next(), writer, level + 1);
+		}
+		
+		//Case: Other values
+		while (it.hasNext()) {
+			writer.write(",");
+			writeEntry(it.next(), writer, level + 1);
+		}
+
+		// Case: Tail/end of obj:
+		writer.write("\n}");
 	
-	
+
+Keeping this just in case (from asNestedArray()):
+		// TODO Fill in using iteration (not replace/split/join methods).
+		// TODO Optional: Avoid repeated code and hard-coding the indent level.
+
+		/*
+		 * TODO Read then delete this comment.
+		 *
+		 * The parameter syntax for elements looks like:
+		 *
+		 * Map<String, ? extends Collection<Integer>> elements
+		 *
+		 * The syntax above makes this method directly useful for your project.
+		 * However, you may not know how to interpret this syntax yet. It behaves
+		 * as if it were this instead:
+		 *
+		 * HashMap<String, HashSet<Integer>> elements
+		 *
+		 * You may want to use the "var" keyword here to make dealing with the syntax
+		 * a little bit easier.
+		 */
