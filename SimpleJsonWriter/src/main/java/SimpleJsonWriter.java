@@ -6,11 +6,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
-
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Stream;
 import java.util.Iterator;
 /**
  * Outputs several simple data structures in "pretty" JSON format where newlines
@@ -24,7 +27,8 @@ import java.util.Iterator;
  * @version Fall 2020
  */
 public class SimpleJsonWriter {
-
+	public static int count = 0;
+	
 	/**
 	 * Writes the elements as a pretty JSON array.
 	 *
@@ -36,22 +40,43 @@ public class SimpleJsonWriter {
 	public static void asArray(Collection<Integer> elements, Writer writer, int level) throws IOException {
 		// TODO Fill in using iteration (not replace/split/join methods).
 		// TODO Optional: Avoid repeated code and hard-coding the indent level.
+
+		Integer head = elements.stream().findFirst().orElse(null);
+
+		
+		Consumer<Integer> writeEntries = elem -> {
+			try {
+				writer.write(",\n");
+				indent(elem, writer, level + 1);
+			}
+			
+			catch (Exception e) {
+			
+			}
+		};
+	
+		
+	
 		
 		//Start array
-		Iterator<Integer> it = elements.iterator();
-		
 		//Case: Head
 		writer.write("[");
-		if (it.hasNext()) {
-			writer.write("\n");
-			indent(it.next(), writer, level + 1);
-		}
-			
 		
-		//Case: Other values
-		while (it.hasNext()) {
-			writer.write(",\n");
-			indent(it.next(), writer, level + 1);
+		//Case: All other values
+		
+		if (head != null) {
+			writer.write("\n");
+			indent(head, writer, level + 1);
+		}
+		
+		
+		
+		try {
+			elements.stream().skip(1).forEach(writeEntries);
+		}
+		
+		catch (Exception e) {
+			System.out.println("o no");
 		}
 		
 		//Case: Tail/After all elements
@@ -59,7 +84,6 @@ public class SimpleJsonWriter {
 		writer.write("\n");
 		indent(writer, level);
 		writer.write("]");
-		
 
 	}
 
@@ -73,24 +97,48 @@ public class SimpleJsonWriter {
 	 */
 	public static void asObject(Map<String, Integer> elements, Writer writer, int level) throws IOException {
 		
+		String head = elements.keySet().stream().findFirst().orElse(null);
+		
+		
+		
+		Consumer<String> writeEntries = key -> {
+				try {
+					writer.write(",\n");
+					indent(key, writer, level + 1);
+					writer.write(": ");
+					writer.write(elements.get(key).toString());
+				}
+				
+				catch (Exception e) {
+					System.out.println("What");
+			}
+			
+		
+		};
+		
 		//Case: Start of obj/head
-		Set<Map.Entry<String,Integer>> entries = elements.entrySet();
-		Iterator<Map.Entry<String, Integer>> it = entries.iterator();
-		
+	
 		writer.write("{");
-		if (it.hasNext()) {
-			writeEntry(it.next(), writer, level + 1);
+		
+		if (head != null) {
+			writer.write("\n");
+			indent(head, writer, level + 1);
+			writer.write(": ");
+			writer.write(elements.get(head).toString());
 		}
 		
-		
-		//Case: Other values
-		while (it.hasNext()) {
-			writer.write(",");
-			writeEntry(it.next(), writer, level + 1);
+		// Case: All values
+		try {
+			elements.keySet().stream().skip(1).forEach(writeEntries);
 		}
+		catch(Exception e) {
+			System.out.println("Error again - asObject");
+		}
+
 		
 		//Case: Tail/end of obj
 		writer.write("\n}");
+
 	}
 
 	/**
@@ -109,22 +157,53 @@ public class SimpleJsonWriter {
 		
 		//Case: Start of obj/head
 		
-		Iterator<String> it = elements.keySet().iterator();
+		String headKey = elements.keySet().stream().findFirst().orElse(null);
+	
+		Consumer<String> writeEntries = key -> {
+			try {
+				writer.write(",\n");
+				indent(key, writer, level + 1);
+				writer.write(": ");
+				asArray(elements.get(key), writer, level + 1);
+			}
+			
+			catch (Exception e) {
+				System.out.println("Error - headKey");
+			}
+		};
+		
+		
+		/*
+		//writeEntry
+		writer.write("\n");
+		indent(key, writer, level);
+		writer.write(": ");
+		asArray(values, writer, level);
+		*/
 		
 		writer.write("{");
-		if (it.hasNext()) {
-			String key = it.next();
-			writeEntry(key, elements.get(key), writer, level + 1);
-			
+		if (headKey != null) {
+			writer.write("\n");
+			indent(headKey, writer, level + 1);
+			writer.write(": ");
+			asArray(elements.get(headKey), writer, level + 1);
 		}
 		
+		try {
+			elements.keySet().stream().skip(1).forEach(writeEntries);
+		}
+		
+		catch (Exception e) {
+			System.out.println("Error - as nestedArray");
+		}
+		/*
 		//Case: Other values
 		while (it.hasNext()) {
 			writer.write(",");
 			String key = it.next();
 			writeEntry(key, elements.get(key), writer, level + 1);
 		}
-		
+		*/
 		//Case: Tail/end of obj
 		writer.write("\n}");
 	}
@@ -330,6 +409,7 @@ public class SimpleJsonWriter {
 	 * @param args unused
 	 */
 	public static void main(String[] args) {
+
 		// MODIFY AS NECESSARY TO DEBUG YOUR CODE
 
 		TreeSet<Integer> elements = new TreeSet<>();
@@ -344,6 +424,18 @@ public class SimpleJsonWriter {
 		elements.add(67);
 		System.out.println("\nSimple:");
 		System.out.println(asArray(elements));
+		
+		Map<String, Integer> map = new HashMap<>();
+		
+		for (int i = 65; i < 91; i++) {
+			map.put(Character.toString((char)i), i);
+		}
+		
+		System.out.println("\nObject:");
+		System.out.println(asObject(map));
+		
+		
+
 		
 		
 	}
